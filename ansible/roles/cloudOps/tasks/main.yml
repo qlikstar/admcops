@@ -1,0 +1,78 @@
+---
+# file: roles/common/tasks/main.yml
+
+# - name: be sure ntp is installed
+#   apt: name=ntp state=installed
+#   tags: ntp
+
+# - name: be sure ntp is configured
+#   template: src=ntp.conf.j2 dest=/etc/ntp.conf
+#   notify:
+#     - restart ntpd
+#   tags: ntp
+
+# - name: be sure ntpd is running and enabled
+#   service: name=ntpd state=started enabled=yes
+#   tags: ntp
+
+# - shell: 'date +%Y%m%d%H%M%S.%5N'
+#   register: current_run_timestamp
+
+
+- name: ping servers
+  ping:
+  remote_user: "{{remote_user}}"
+
+# - name: Wait for SSH to be available
+#   pause: minutes=1
+
+# - uri: url=http://www.google.com
+# # Check that a page returns a status 200 and fail if the word AWESOME is not
+# # in the page contents.
+# - action: uri url=http://www.google.com return_content=yes
+#   register: webpage
+
+# - action: fail
+#   when: "'AWESOME' not in webpage.content"
+
+# - name: download prometheus agent
+#   get_url:
+#     url: https://github.com/prometheus/node_exporter/releases/download/0.12.0/node_exporter-0.12.0.linux-amd64.tar.gz
+#     dest: /home/ubuntu/
+    # mode: 0440
+
+# Example from Ansible Playbooks
+- name: unarchive the downloaded prometheus agent
+  unarchive: src=https://github.com/prometheus/node_exporter/releases/download/0.12.0/node_exporter-0.12.0.linux-amd64.tar.gz dest=/home/ubuntu/ remote_src=yes
+
+
+# - name: this task will make changes to the system even in check mode
+#   command: nohup /home/ubuntu/node_exporter-0.12.0.linux-amd64/node_exporter &
+#   check_mode: yes
+#   ignore_errors: yes
+
+- name: Get process id running the webserver
+  shell: lsof -t -i:{{prometheus_port}}
+  become: root
+  become_method: sudo
+  ignore_errors: yes
+  register: pid
+
+- name: Kill webserver if it's already running
+  shell: kill {{pid.stdout}}
+  when: pid.stdout != ""
+
+- name: Wait for 5 seconds before launching prometheus agent again
+  pause: seconds=5
+
+- name: Run prometheus agent 
+  shell: "nohup /home/ubuntu/node_exporter-0.12.0.linux-amd64/node_exporter 2>&1 >/dev/null &"
+
+- name: Wait for website port to become available
+  wait_for: port={{prometheus_port}} delay=1
+
+- name: Copy war file from main to remote servers
+  copy: src=/home/ubuntu/ansible-files/non-prod dest=/home/ubuntu/non-prod backup=yes
+
+
+

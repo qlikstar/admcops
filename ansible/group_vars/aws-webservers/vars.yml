@@ -1,0 +1,3 @@
+---
+remote_user: ubuntu
+prometheus_port: 9100
