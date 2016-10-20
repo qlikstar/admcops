@@ -18,7 +18,7 @@ public class RestInterfaceController {
 
 
     @Value("${prometheus.server.url}")
-    String PROMETHEUS_SERVER_URL;
+    private String PROMETHEUS_SERVER_URL;
 
     @RequestMapping("/{metric}")
     Object returnObjectFromPrometheus( @PathVariable("metric") String metricName ){
@@ -32,7 +32,6 @@ public class RestInterfaceController {
         System.out.println(url);
 
         return restTemplate.getForObject(url, Object.class);
-
 
     }
 

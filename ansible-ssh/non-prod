@@ -1,0 +1,9 @@
+# file: non-prod
+
+[aws-webservers]
+10.0.2.142
+10.0.4.251
+
+[azure-webservers]
+172.17.1.4
+172.17.1.5

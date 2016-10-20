@@ -18,11 +18,6 @@
 # - shell: 'date +%Y%m%d%H%M%S.%5N'
 #   register: current_run_timestamp
 
-
-- name: ping servers
-  ping:
-  remote_user: "{{remote_user}}"
-
 # - name: Wait for SSH to be available
 #   pause: minutes=1
 
@@ -41,15 +36,22 @@
 #     dest: /home/ubuntu/
     # mode: 0440
 
-# Example from Ansible Playbooks
-- name: unarchive the downloaded prometheus agent
-  unarchive: src=https://github.com/prometheus/node_exporter/releases/download/0.12.0/node_exporter-0.12.0.linux-amd64.tar.gz dest=/home/ubuntu/ remote_src=yes
-
 
 # - name: this task will make changes to the system even in check mode
 #   command: nohup /home/ubuntu/node_exporter-0.12.0.linux-amd64/node_exporter &
 #   check_mode: yes
 #   ignore_errors: yes
+
+
+
+- name: ping servers
+  ping:
+  remote_user: "{{remote_user}}"
+
+
+# Example from Ansible Playbooks
+- name: unarchive the downloaded prometheus agent
+  unarchive: src=https://github.com/prometheus/node_exporter/releases/download/0.12.0/node_exporter-0.12.0.linux-amd64.tar.gz dest=/home/ubuntu/ remote_src=yes
 
 - name: Get process id running the webserver
   shell: lsof -t -i:{{prometheus_port}}

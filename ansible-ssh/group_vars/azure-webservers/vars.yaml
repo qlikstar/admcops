@@ -1,0 +1,8 @@
+---
+remote_user: ubuntu
+prometheus_port: 9100
+webserver_port: 8080
+java_version: 8
+bastion_host: 104.40.71.117
+
+ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q ubuntu@{{bastion_host}}"'

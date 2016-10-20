@@ -23,9 +23,16 @@ public class WebController {
         return new ModelAndView("playbook");
     }
 
+    @RequestMapping("/manageapps")
+    ModelAndView manageapps(){
+        return new ModelAndView("manageapps");
+    }
+
     @RequestMapping("/blank")
     ModelAndView blank(){
         return new ModelAndView("blank");
     }
+
+
 
 }

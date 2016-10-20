@@ -5,7 +5,7 @@ var seriesServerUp = function () {
     $.ajax({
         'async': false,
         'type': "GET",
-        'url': "/monitor/up",
+        'url': "/monitor/probe_success",
         'dataType': "json",
         'success': function (data) {
            var input = new Array();
