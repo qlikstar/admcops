@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.citrix.hackathon'
+version = '0.0.1-SNAPSHOT'
+
+description = """admcops"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mustache', version:'1.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'1.4.1.RELEASE'
+    compile group: 'mysql', name: 'mysql-connector-java', version:'5.1.39'
+    compile group: 'org.webjars', name: 'bootstrap', version:'3.3.4'
+    compile group: 'org.webjars', name: 'jquery', version:'2.1.4'
+    compile group: 'io.prometheus', name: 'simpleclient', version:'0.0.17'
+    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.4.1.RELEASE') {
+exclude(module: 'commons-logging')
+    }
+}
